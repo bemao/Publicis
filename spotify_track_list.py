@@ -2,7 +2,7 @@ import json
 import numpy as np
 import requests
 
-def search_track_name(q):
+def _search_track_name(q):
     # searches spotify for track by name
     query = q.lower().replace(' ', '%20')
     
@@ -13,7 +13,7 @@ def search_track_name(q):
 
     return json.loads(response.text)
 
-def eval_match(st1, st2):
+def _eval_match(st1, st2):
     # quick evaluation of the how well the queried results match
     # the search terms
     
@@ -31,18 +31,18 @@ def eval_match(st1, st2):
     
     return ct/max(n1,n2)
 
-def check_name(q):
+def _check_name(q):
     # checks the entered name against the spotify track database
     # returns a tuple: (average name matching score, best matching score, track_id)
     
-    a = search_track_name(q)
+    a = _search_track_name(q)
     tt = len(a['tracks']['items'])
     if tt < 1:
         return (0.0,0.0,0.0)
 
     match_percs = np.zeros(tt)
     for i in xrange(tt):
-        match_percs[i] = eval_match(a['tracks']['items'][i]['name'], q)
+        match_percs[i] = _eval_match(a['tracks']['items'][i]['name'], q)
     
     j = np.argmax(match_percs)
     id_no = a['tracks']['items'][j]['id']
@@ -72,7 +72,7 @@ def create_track_list(string_in, step=2, threshold=.8):
     while True:
         while end < len(string_lst):
             q = ' '.join(string_lst[beg:end])
-            names_tpl = check_name(q)
+            names_tpl = _check_name(q)
             if names_tpl[1]>threshold:
                 print q
                 beg = end
@@ -83,7 +83,7 @@ def create_track_list(string_in, step=2, threshold=.8):
                 end += 1
 
         q = ' '.join(string_lst[beg:end])
-        names_tpl = check_name(q)
+        names_tpl = _check_name(q)
         if names_tpl[1]>threshold:
                 print q
                 track_names.append(q)
