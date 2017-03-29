@@ -51,7 +51,7 @@ def check_name(q):
 
 def create_track_list(string_in, step=2, threshold=.8):
     """
-    given a string, seperated by ' ', attempts to create a spotify playlist of songs
+    given a string, seperated by ' ', attempts to create a list of spotify songs
     matching the terms in the string
     inputs:  string_in - a string a track names, seperated by spaces (' ')
              step - the number of words to take at a time when looking for song titles
